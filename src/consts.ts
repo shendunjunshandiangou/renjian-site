@@ -6,7 +6,7 @@ export const SITE = {
   tagline: '用数据、影像、文字与声音记录世界',
   description:
     '这里是一座小小的标本馆。每一次旅行、每一次与模型的对话、每一段钢琴练习，都被编号、归档、钉在软木板上——然后继续生长。',
-  url: 'https://renjian.example.com', // TODO: 上线前替换为真实域名
+  url: 'https://dunkangmao.com',
   email: 'hi@renjian.me',
   established: 'EST. 2023',
 };

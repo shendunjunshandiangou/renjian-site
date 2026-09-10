@@ -9,7 +9,7 @@ export const GET: APIRoute = async () => {
   const postPaths = posts.map((p) => `/${p.data.module}/${p.id}`);
 
   const urls = [...staticPaths, ...postPaths]
-    .map((p) => `  <url><loc>${SITE.url}${p}/</loc></url>`)
+    .map((p) => `  <url><loc>${SITE.url}${p.replace(/\/$/, '')}/</loc></url>`)
     .join('\n');
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

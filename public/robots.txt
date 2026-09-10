@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://renjian.example.com/sitemap.xml
+Sitemap: https://dunkangmao.com/sitemap.xml
