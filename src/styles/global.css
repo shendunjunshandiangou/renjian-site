@@ -3,6 +3,7 @@
    Noto Serif SC 子集：仅含本站实际用字（626 字形），单字重 ~100KB。
    背景：原字体栈依赖 Songti SC/STSong/SimSun 等设备专有字体，Android 全无 →
    汉字在移动端回落为无衬线（即“字体丢失”）。自托管子集后各平台一致。
+   Noto Sans SC 子集：作 --mono/--sans 的 CJK 兜底，不依赖系统字体。
    许可：SIL Open Font License 1.1，见 public/fonts/OFL.txt。 */
 @font-face {
   font-family: "Noto Serif SC";
@@ -17,6 +18,20 @@
   font-weight: 700;
   font-display: swap;
   src: url("../assets/fonts/noto-serif-sc-subset-700.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/noto-sans-sc-subset-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Noto Sans SC";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/noto-sans-sc-subset-700.woff2") format("woff2");
 }
 
 :root {
