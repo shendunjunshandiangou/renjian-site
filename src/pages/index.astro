@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE, MODULES, NOTES_CARD, STATUS_LABEL, STATUS_CLASS } from '../consts';
+import { SITE, MODULES, NOTES_CARD, STATUS_LABEL, STATUS_CLASS, url } from '../consts';
 import heroBox from '../assets/illustrations/hero-box.jpg';
 import illuTravel from '../assets/illustrations/illu-travel.jpg';
 import illuAiLab from '../assets/illustrations/illu-ai-lab.jpg';
@@ -70,7 +70,7 @@ const latest = stream.length ? fmt(stream[0].entry.data.date) : '—';
       </div>
       <div class="grid">
         {MODULES.map((m) => (
-          <a class="cell" href={`/${m.slug}`}>
+          <a class="cell" href={url(`/${m.slug}`)}>
             <div class="pic">
               <Image src={ILLUS[m.illu]} alt={`${m.name} · 插图`} class={m.fitContain ? 'fit-c' : undefined} widths={[480, 800]} sizes="(max-width: 720px) 100vw, 33vw" />
             </div>
@@ -81,7 +81,7 @@ const latest = stream.length ? fmt(stream[0].entry.data.date) : '—';
             <div class="foot"><span>{posts.filter((p) => p.data.module === m.slug).length} 件标本</span><span>→</span></div>
           </a>
         ))}
-        <a class="cell" href="/notes">
+        <a class="cell" href={url('/notes')}>
           <div class="pic">
             <Image src={ILLUS[NOTES_CARD.illu]} alt="随想 · 便签与铅笔" widths={[480, 800]} sizes="(max-width: 720px) 100vw, 33vw" />
           </div>
@@ -107,7 +107,7 @@ const latest = stream.length ? fmt(stream[0].entry.data.date) : '—';
           <article class="entry">
             <div class="rs">{item.entry.data.specimen}<span class="kind">{MOD_NAME[item.entry.data.module]}</span></div>
             <div>
-              <h4><a href={`/${item.entry.data.module}/${item.entry.id}`}>{item.entry.data.title}</a></h4>
+              <h4><a href={url(`/${item.entry.data.module}/${item.entry.id}`)}>{item.entry.data.title}</a></h4>
               <p class="excerpt">{item.entry.data.description}</p>
               {item.entry.data.tags.length > 0 && (
                 <div class="tags">{item.entry.data.tags.map((t) => <span class="tag">{t}</span>)}</div>
@@ -130,7 +130,7 @@ const latest = stream.length ? fmt(stream[0].entry.data.date) : '—';
         )
       )}
 
-      <div class="more"><a href="/all">查看全部标本 →</a></div>
+      <div class="more"><a href={url('/all')}>查看全部标本 →</a></div>
     </div>
   </section>
 </BaseLayout>

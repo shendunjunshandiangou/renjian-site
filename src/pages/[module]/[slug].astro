@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { MODULES, STATUS_LABEL, STATUS_CLASS } from '../../consts';
+import { MODULES, STATUS_LABEL, STATUS_CLASS, url } from '../../consts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -23,7 +23,7 @@ const fmt = (d: Date) => d.toISOString().slice(0, 10);
     <header class="post-head">
       <div class="wrap">
         <div class="crumbs">
-          <a href="/">{'首页'}</a> / <a href={`/${mod.slug}`}>{mod.name}</a> / {post.data.specimen}
+          <a href={url('/')}>{'首页'}</a> / <a href={url(`/${mod.slug}`)}>{mod.name}</a> / {post.data.specimen}
         </div>
         <h1>{post.data.title}</h1>
         <div class="post-meta">
