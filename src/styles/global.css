@@ -1,5 +1,25 @@
 
-  :root {
+  /* ===== 自托管字体（可合法再分发的 OFL 子集）=====
+   Noto Serif SC 子集：仅含本站实际用字（626 字形），单字重 ~100KB。
+   背景：原字体栈依赖 Songti SC/STSong/SimSun 等设备专有字体，Android 全无 →
+   汉字在移动端回落为无衬线（即“字体丢失”）。自托管子集后各平台一致。
+   许可：SIL Open Font License 1.1，见 public/fonts/OFL.txt。 */
+@font-face {
+  font-family: "Noto Serif SC";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/noto-serif-sc-subset-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Noto Serif SC";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/noto-serif-sc-subset-700.woff2") format("woff2");
+}
+
+:root {
     --bg: #faf8f3;
     --ink: #26221c;
     --ink-soft: #6b6357;
@@ -11,7 +31,7 @@
     --card: #fffdf8;
     --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
     --mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, "Courier New", monospace;
-    --sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { background: var(--bg); scroll-behavior: smooth; }
