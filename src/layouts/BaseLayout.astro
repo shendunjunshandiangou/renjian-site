@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { SITE, NAV, SOCIAL, url } from '../consts';
+import { SITE, NAV, SOCIAL } from '../consts';
 
 interface Props {
   title?: string;
@@ -18,14 +18,14 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{pageTitle}</title>
   <meta name="description" content={description} />
-  <link rel="alternate" type="application/rss+xml" title={`${SITE.name} · 标本`} href={url('/rss.xml')} />
-  <link rel="alternate" type="application/rss+xml" title={`${SITE.name} · 随想`} href={url('/notes.xml')} />
+  <link rel="alternate" type="application/rss+xml" title={`${SITE.name} · 标本`} href="/rss.xml" />
+  <link rel="alternate" type="application/rss+xml" title={`${SITE.name} · 随想`} href="/notes.xml" />
 </head>
 <body>
   <header class="top">
     <div class="wrap top-inner">
       <div class="brand">
-        <a class="brand-name" href={url('/')}>{SITE.name}</a>
+        <a class="brand-name" href="/">{SITE.name}</a>
         <span class="brand-seal">{SITE.seal}</span>
       </div>
       <nav class="main">
@@ -48,7 +48,7 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
         <div class="foot-links">
           <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
           {SOCIAL.map((s) => <a href={s.href}>{s.label}</a>)}
-          <a href={url('/rss.xml')}>RSS</a>
+          <a href="/rss.xml">RSS</a>
         </div>
       </div>
       <div class="foot-base">

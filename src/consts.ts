@@ -6,7 +6,7 @@ export const SITE = {
   tagline: '用数据、影像、文字与声音记录世界',
   description:
     '这里是一座小小的标本馆。每一次旅行、每一次与模型的对话、每一段钢琴练习，都被编号、归档、钉在软木板上——然后继续生长。',
-  url: 'https://shendunjunshandiangou.github.io/renjian-site',
+  url: 'https://dunkangmao.com',
   email: 'hi@renjian.me',
   established: 'EST. 2023',
 };
@@ -16,14 +16,6 @@ export const SOCIAL: { label: string; href: string }[] = [
   { label: 'GitHub', href: 'https://github.com/' },
   { label: '豆瓣', href: 'https://www.douban.com/' },
 ];
-
-// 站点部署在子路径下（astro.config.mjs 的 base）。
-// 所有内部链接必须经过 url()，否则会指向根路径而 404。
-const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
-export const url = (path: string = '/') => {
-  const p = path.replace(/^\//, '');
-  return p ? `${BASE}/${p}` : BASE || '/';
-};
 
 export type ModuleSlug = 'travel' | 'ai-lab' | 'math-notes' | 'reading' | 'music';
 
@@ -53,10 +45,10 @@ export const NOTES_CARD = {
 };
 
 export const NAV = [
-  { href: url('/'), label: '首页' },
-  ...MODULES.map((m) => ({ href: url(`/${m.slug}`), label: m.name })),
-  { href: url('/notes'), label: '随想' },
-  { href: url('/about'), label: '关于' },
+  { href: '/', label: '首页' },
+  ...MODULES.map((m) => ({ href: `/${m.slug}`, label: m.name })),
+  { href: '/notes', label: '随想' },
+  { href: '/about', label: '关于' },
 ];
 
 export const STATUS_LABEL = { seed: '种子', growing: '生长中', evergreen: '已长成' } as const;
