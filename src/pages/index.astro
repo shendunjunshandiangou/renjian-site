@@ -1,17 +1,136 @@
 ---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE, MODULES, NOTES_CARD, STATUS_LABEL, STATUS_CLASS } from '../consts';
+import heroBox from '../assets/illustrations/hero-box.jpg';
+import illuTravel from '../assets/illustrations/illu-travel.jpg';
+import illuAiLab from '../assets/illustrations/illu-ai-lab.jpg';
+import illuMath from '../assets/illustrations/illu-math.jpg';
+import illuReading from '../assets/illustrations/illu-reading.jpg';
+import illuMusic from '../assets/illustrations/illu-music.jpg';
+import illuNotes from '../assets/illustrations/illu-notes.jpg';
 
+const ILLUS: Record<string, ImageMetadata> = {
+  'illu-travel': illuTravel,
+  'illu-ai-lab': illuAiLab,
+  'illu-math': illuMath,
+  'illu-reading': illuReading,
+  'illu-music': illuMusic,
+  'illu-notes': illuNotes,
+};
+
+const MOD_NAME = Object.fromEntries(MODULES.map((m) => [m.slug, m.name]));
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const notes = await getCollection('notes', ({ data }) => !data.draft);
+
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+const fmtTime = (d: Date) => d.toISOString().slice(0, 16).replace('T', ' · ');
+
+const stream = [
+  ...posts.map((p) => ({ kind: 'post' as const, entry: p })),
+  ...notes.map((n) => ({ kind: 'note' as const, entry: n })),
+]
+  .sort((a, b) => b.entry.data.date.getTime() - a.entry.data.date.getTime())
+  .slice(0, 7);
+
+const total = posts.length + notes.length;
+const growing = posts.filter((p) => p.data.status === 'growing').length;
+const evergreen = posts.filter((p) => p.data.status === 'evergreen').length;
+const latest = stream.length ? fmt(stream[0].entry.data.date) : '—';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <div class="hero-kicker"><span class="dot"></span>RS-0000 · 本站总目 · 个人数字花园 × AI 作品实验室</div>
+        <h1>用数据、影像、<br />文字与声音<em>记录世界</em></h1>
+        <p class="hero-sub">{SITE.description}</p>
+        <div class="hero-meta">
+          <span>馆藏总量 <b>{total} 件</b></span>
+          <span>最近采集 <b>{latest}</b></span>
+          <span>生长中 <b>{growing}</b></span>
+          <span>已长成 <b>{evergreen}</b></span>
+        </div>
+      </div>
+      <figure class="hero-fig">
+        <Image src={heroBox} alt="人间样本采集箱 · 手绘水彩" widths={[700, 1280]} sizes="(max-width: 720px) 100vw, 55vw" loading="eager" />
+        <figcaption><span>RS-0000 · 采集箱总览</span><span>手绘水彩 · AI 工坊协同出品</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="modules">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="t">馆藏分区<span class="en">COLLECTIONS</span></div>
+        <div class="count">06 区</div>
+      </div>
+      <div class="grid">
+        {MODULES.map((m) => (
+          <a class="cell" href={`/${m.slug}`}>
+            <div class="pic">
+              <Image src={ILLUS[m.illu]} alt={`${m.name} · 插图`} class={m.fitContain ? 'fit-c' : undefined} widths={[480, 800]} sizes="(max-width: 720px) 100vw, 33vw" />
+            </div>
+            <div class="idx"><span class="no">{m.no}</span><span>{m.prefix}</span></div>
+            <h3>{m.name}</h3>
+            <div class="en">{m.en}</div>
+            <p>{m.desc}</p>
+            <div class="foot"><span>{posts.filter((p) => p.data.module === m.slug).length} 件标本</span><span>→</span></div>
+          </a>
+        ))}
+        <a class="cell" href="/notes">
+          <div class="pic">
+            <Image src={ILLUS[NOTES_CARD.illu]} alt="随想 · 便签与铅笔" widths={[480, 800]} sizes="(max-width: 720px) 100vw, 33vw" />
+          </div>
+          <div class="idx"><span class="no">{NOTES_CARD.no}</span><span>{NOTES_CARD.prefix}</span></div>
+          <h3>{NOTES_CARD.name}</h3>
+          <div class="en">{NOTES_CARD.en}</div>
+          <p>{NOTES_CARD.desc}</p>
+          <div class="foot"><span>{notes.length} 条片段</span><span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="stream">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="t">新入库<span class="en">LATEST SPECIMENS</span></div>
+        <div class="count">按采集日期排序</div>
+      </div>
+
+      {stream.map((item) =>
+        item.kind === 'post' ? (
+          <article class="entry">
+            <div class="rs">{item.entry.data.specimen}<span class="kind">{MOD_NAME[item.entry.data.module]}</span></div>
+            <div>
+              <h4><a href={`/${item.entry.data.module}/${item.entry.id}`}>{item.entry.data.title}</a></h4>
+              <p class="excerpt">{item.entry.data.description}</p>
+              {item.entry.data.tags.length > 0 && (
+                <div class="tags">{item.entry.data.tags.map((t) => <span class="tag">{t}</span>)}</div>
+              )}
+            </div>
+            <div class="meta">
+              <span class={`badge ${STATUS_CLASS[item.entry.data.status]}`}>{STATUS_LABEL[item.entry.data.status]}</span>
+              <br />{fmt(item.entry.data.date)}
+            </div>
+          </article>
+        ) : (
+          <article class="entry fragment">
+            <div class="rs">{item.entry.data.specimen}<span class="kind">{item.entry.data.module ? MOD_NAME[item.entry.data.module] : '随想'}</span></div>
+            <div class="frag-body">
+              <div class="frag-label">随想 · FRAGMENT{item.entry.data.module ? ` · 转自${MOD_NAME[item.entry.data.module]}` : ''}</div>
+              <p class="frag-text">{item.entry.body?.trim()}</p>
+              <div class="frag-time">{fmtTime(item.entry.data.date)}</div>
+            </div>
+          </article>
+        )
+      )}
+
+      <div class="more"><a href="/notes">查看全部标本 →</a></div>
+    </div>
+  </section>
+</BaseLayout>

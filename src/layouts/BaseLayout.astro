@@ -1,0 +1,87 @@
+---
+import '../styles/global.css';
+import { SITE, NAV } from '../consts';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = SITE.description } = Astro.props;
+const pageTitle = title ? `${title} — ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="alternate" type="application/rss+xml" title={`${SITE.name} · 标本`} href="/rss.xml" />
+  <link rel="alternate" type="application/rss+xml" title={`${SITE.name} · 随想`} href="/notes.xml" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <div class="brand">
+        <a class="brand-name" href="/">{SITE.name}</a>
+        <span class="brand-seal">{SITE.seal}</span>
+      </div>
+      <nav class="main">
+        {NAV.map((n) => (
+          <a href={n.href} class={current === n.href || (n.href !== '/' && current.startsWith(n.href)) ? 'cur' : undefined}>{n.label}</a>
+        ))}
+      </nav>
+    </div>
+  </header>
+
+  <slot />
+
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <div class="foot-brand">{SITE.name}</div>
+          <div class="foot-note">标本持续采集中。欢迎来信交换藏品。</div>
+        </div>
+        <div class="foot-links">
+          <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          <a href="/rss.xml">RSS</a>
+        </div>
+      </div>
+      <div class="foot-base">
+        <span>© {new Date().getFullYear()} {SITE.name} {SITE.nameEn}</span>
+        <span>{SITE.established} · 馆藏于云端与纸张之间</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 动效 JS 门控：JS 正常才启用动画；无 JS 时页面即为完整终态（v3.6 防弹原则）
+    (function () {
+      document.documentElement.classList.add('anim');
+      var items = document.querySelectorAll('.cell, .entry, .section-head');
+      items.forEach(function (el) { el.classList.add('reveal'); });
+      var io = new IntersectionObserver(function (entries) {
+        var batch = entries.filter(function (e) { return e.isIntersecting; });
+        batch.forEach(function (e, i) {
+          e.target.style.transitionDelay = (i * 90) + 'ms';
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        });
+      }, { threshold: 0.12 });
+      items.forEach(function (el) { io.observe(el); });
+
+      // ?t=ms — 定格所有动画到指定时刻（调试用）
+      var t = new URLSearchParams(location.search).get('t');
+      if (t !== null) {
+        setTimeout(function () {
+          document.getAnimations().forEach(function (a) { a.currentTime = +t; a.pause(); });
+          if (+t > 0) items.forEach(function (el) { el.classList.add('in'); el.style.transitionDelay = '0ms'; });
+        }, 60);
+      }
+    })();
+  </script>
+</body>
+</html>
