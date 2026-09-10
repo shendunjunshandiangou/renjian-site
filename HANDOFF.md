@@ -81,13 +81,19 @@ git init && git add -A && git commit -m "chore: astro minimal init"
 
 > 第 8-10 步由小毛1号接手完成（小毛3号 k3 额度中断）。
 
-### 发布状态（待授权）
+### 发布状态（✅ 已部署到 GitHub Pages）
 
-- **唯一阻塞**：GitHub 未授权（`gh` 未登录，无 GH 环境变量）
-- 发布执行单见 `RELEASE.md`（① 连接 GitHub → ② 建仓库推 master → ③ Pages 设 GitHub Actions → ④ DNS 四条 A + www CNAME → ⑤ Custom domain + HTTPS → ⑥ 回填本看板）
-- 详细 DNS/域名 runbook 见 `DEPLOY.md`
-- 发布基建已就绪：`astro.config.mjs` site、`public/CNAME`、`public/robots.txt`、`.github/workflows/deploy.yml`（触发分支已匹配 `master`）
-- 授权后第 ⑥ 步将在此回填**仓库地址 / Actions 运行地址 / 线上地址 / 构建结果**
+- **仓库**：https://github.com/shendunjunshandiangou/renjian-site （public，默认分支 `master`）
+- **Actions 运行**：https://github.com/shendunjunshandiangou/renjian-site/actions/runs/34506749496 （`workflow_dispatch`，success）
+  - push 触发的首次运行：https://github.com/shendunjunshandiangou/renjian-site/actions/runs/34506721660 （success，37s）
+- **Pages 临时地址**：https://shendunjunshandiangou.github.io/renjian-site/ （HTTP 200）
+- **构建结果**：14 页通过；线上抽查 `/`、`/travel/`、`/notes/`、`/about/`、`/all/`、`/rss.xml`、`/sitemap.xml` 全部 200，首页标题正常
+- **Pages 配置**：`build_type=workflow`，`https_enforced=true`
+
+**⏸ 待办（下一道外部变更关卡，需总控验收后决定）**：Cloudflare DNS 四条 A + `www` CNAME，然后把 Custom domain 填 `dunkangmao.com`。
+
+- 发布执行单见 `RELEASE.md`；DNS/域名 runbook 见 `DEPLOY.md`
+- 发布基建：`astro.config.mjs` site、`public/CNAME`、`public/robots.txt`、`.github/workflows/deploy.yml`（触发分支 `[master, main]`）
 
 ### 质检发现（已修复）
 
