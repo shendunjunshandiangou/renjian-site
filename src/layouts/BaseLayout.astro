@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { SITE, NAV } from '../consts';
+import { SITE, NAV, SOCIAL } from '../consts';
 
 interface Props {
   title?: string;
@@ -47,6 +47,7 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
         </div>
         <div class="foot-links">
           <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          {SOCIAL.map((s) => <a href={s.href}>{s.label}</a>)}
           <a href="/rss.xml">RSS</a>
         </div>
       </div>

@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../consts';
+---
+
+<BaseLayout title="关于 / Now" description="关于这个标本馆，以及此刻正在做的事。">
+  <section class="list-section">
+    <div class="wrap">
+      <div class="list-head">
+        <h1>关于 / Now<span class="en">ABOUT</span></h1>
+        <div class="count">RS-0000</div>
+      </div>
+
+      <div class="about-body">
+        <p>这里是「{SITE.name}」——一座小小的个人标本馆。</p>
+        <p>我把它当作一块软木板：把旅行途中采集的光线、与模型对话时掉落的句子、琴键上的错音、读到一半的书签，统统编号、归档、钉上去。标本不会死，它们只是被固定住，然后继续生长。</p>
+
+        <h2>此刻（Now）</h2>
+        <ul>
+          <li>搭建这座标本馆的第一版骨架</li>
+          <li>整理过去两年的旅行照片，按采集地重新编号</li>
+          <li>练肖邦《雨滴》前奏曲，第三十一次录音待修</li>
+          <li>读《浮生六记》，写纸上回声系列</li>
+        </ul>
+
+        <h2>关于编号</h2>
+        <p>正式标本使用 <code>RS-XXXX</code>，随想片段使用 <code>RS-F-XXXX</code>。各模块另有前缀：行旅志 RS-T、AI 工坊 RS-A、数理札记 RS-M、纸上回声 RS-R、声音档案 RS-S。</p>
+
+        <h2>生长状态</h2>
+        <ul>
+          <li><b>种子</b>——刚记下一个念头，还没展开</li>
+          <li><b>生长中</b>——正在补充与修订</li>
+          <li><b>已长成</b>——我认为它可以定稿了</li>
+        </ul>
+
+        <h2>联系</h2>
+        <p>欢迎来信交换藏品：<a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

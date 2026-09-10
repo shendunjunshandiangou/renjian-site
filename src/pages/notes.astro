@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { MODULES } from '../consts';
+
+const MOD_NAME = Object.fromEntries(MODULES.map((m) => [m.slug, m.name]));
+
+const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+const fmtTime = (d: Date) => d.toISOString().slice(0, 16).replace('T', ' · ');
+---
+
+<BaseLayout title="随想" description="散落在各处的只言片语，从各模块摘取，按时间流不断生长。">
+  <section class="list-section">
+    <div class="wrap">
+      <div class="list-head">
+        <h1>随想<span class="en">FRAGMENTS</span></h1>
+        <div class="count">{String(notes.length).padStart(2, '0')} 条</div>
+      </div>
+      <p class="list-note">不属于任何模块的碎片思考——或长或短，一句话也行。按采集时间倒序。</p>
+
+      {notes.length === 0 ? (
+        <p class="empty-note">还没有片段入库。</p>
+      ) : (
+        notes.map((n) => (
+          <article class="entry fragment">
+            <div class="rs">
+              {n.data.specimen}
+              <span class="kind">{n.data.module ? MOD_NAME[n.data.module] : '随想'}</span>
+            </div>
+            <div class="frag-body">
+              <div class="frag-label">随想 · FRAGMENT{n.data.module ? ` · 转自${MOD_NAME[n.data.module]}` : ''}</div>
+              <p class="frag-text">{n.body?.trim()}</p>
+              <div class="frag-time">{fmtTime(n.data.date)}</div>
+            </div>
+          </article>
+        ))
+      )}
+    </div>
+  </section>
+</BaseLayout>

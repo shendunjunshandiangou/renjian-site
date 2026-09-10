@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { MODULES, STATUS_LABEL, STATUS_CLASS } from '../consts';
+
+const MOD_NAME = Object.fromEntries(MODULES.map((m) => [m.slug, m.name]));
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const notes = await getCollection('notes', ({ data }) => !data.draft);
+
+const all = [
+  ...posts.map((p) => ({ kind: 'post' as const, entry: p })),
+  ...notes.map((n) => ({ kind: 'note' as const, entry: n })),
+].sort((a, b) => b.entry.data.date.getTime() - a.entry.data.date.getTime());
+
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+const fmtTime = (d: Date) => d.toISOString().slice(0, 16).replace('T', ' · ');
+---
+
+<BaseLayout title="全部标本" description="本站全部已采集标本与片段，按采集日期倒序。">
+  <section class="list-section">
+    <div class="wrap">
+      <div class="list-head">
+        <h1>全部标本<span class="en">ALL SPECIMENS</span></h1>
+        <div class="count">{String(all.length).padStart(2, '0')} 件</div>
+      </div>
+      <p class="list-note">文章与片段混排，按采集日期倒序。</p>
+
+      {all.map((item) =>
+        item.kind === 'post' ? (
+          <article class="entry">
+            <div class="rs">
+              {item.entry.data.specimen}
+              <span class="kind">{MOD_NAME[item.entry.data.module]}</span>
+            </div>
+            <div>
+              <h4><a href={`/${item.entry.data.module}/${item.entry.id}`}>{item.entry.data.title}</a></h4>
+              <p class="excerpt">{item.entry.data.description}</p>
+              {item.entry.data.tags.length > 0 && (
+                <div class="tags">{item.entry.data.tags.map((t) => <span class="tag">{t}</span>)}</div>
+              )}
+            </div>
+            <div class="meta">
+              <span class={`badge ${STATUS_CLASS[item.entry.data.status]}`}>{STATUS_LABEL[item.entry.data.status]}</span>
+              <br />{fmt(item.entry.data.date)}
+            </div>
+          </article>
+        ) : (
+          <article class="entry fragment">
+            <div class="rs">
+              {item.entry.data.specimen}
+              <span class="kind">{item.entry.data.module ? MOD_NAME[item.entry.data.module] : '随想'}</span>
+            </div>
+            <div class="frag-body">
+              <div class="frag-label">随想 · FRAGMENT{item.entry.data.module ? ` · 转自${MOD_NAME[item.entry.data.module]}` : ''}</div>
+              <p class="frag-text">{item.entry.body?.trim()}</p>
+              <div class="frag-time">{fmtTime(item.entry.data.date)}</div>
+            </div>
+          </article>
+        )
+      )}
+    </div>
+  </section>
+</BaseLayout>

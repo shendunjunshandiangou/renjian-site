@@ -65,16 +65,21 @@ git init && git add -A && git commit -m "chore: astro minimal init"
 
 | 步骤 | 状态 | 备注 |
 |---|---|---|
-| 1 初始化 | ⬜ 未开始 | |
-| 2 全局配置 | ⬜ | |
-| 3 内容集合 | ⬜ | |
-| 4 示例内容 | ⬜ | |
-| 5 基础样式 | ⬜ | |
-| 6 首页 | ⬜ | |
-| 7 插图管线 | ⬜ | |
-| 8 模块页 | ⬜ | |
-| 9 导航页脚 | ⬜ | |
-| 10 收尾 | ⬜ | |
+| 1 初始化 | ✅ 完成 | astro 7.3.2 minimal + strict，3 次 commit |
+| 2 全局配置 | ✅ 完成 | `src/consts.ts`：SITE/MODULES/NAV/SOCIAL/STATUS 集中管理 |
+| 3 内容集合 | ✅ 完成 | posts + notes，specimen 必填唯一，zod 校验 |
+| 4 示例内容 | ✅ 完成 | posts 每模块 1 篇 + notes 2 条 |
+| 5 基础样式 | ✅ 完成 | global.css 351 行，令牌与 v8 一致，另补页面级样式 |
+| 6 首页 | ✅ 完成 | 数据驱动，动效原样移植 |
+| 7 插图管线 | ✅ 完成 | 21 张 webp，主图 379kB→102kB，srcset 生效 |
+| 8 模块页 | ✅ 完成 | 5 模块列表页 + 5 文章页 + /notes + /about + /all |
+| 9 导航页脚 | ✅ 完成 | 顶栏八项（含随想），页脚邮箱/社交/RSS |
+| 10 收尾 | ✅ 完成 | rss.xml + notes.xml + sitemap.xml + robots.txt + 暗色模式 + README |
+
+**当前构建：14 页通过**（`npm run build`）。路由全部 200。
+质检截图见 `qa-shots/`（home / travel / post / notes），对照 `research/mockups/shots/home-final-v8.jpg`。
+
+> 第 8-10 步由小毛1号接手完成（小毛3号 k3 额度中断）。第 4 步部署待用户授权 GitHub。
 
 ## 6. 如果小毛3号掉线了
 

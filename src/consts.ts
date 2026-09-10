@@ -11,6 +11,12 @@ export const SITE = {
   established: 'EST. 2023',
 };
 
+// 页脚社交链接（占位，上线前替换为真实地址或删除）
+export const SOCIAL: { label: string; href: string }[] = [
+  { label: 'GitHub', href: 'https://github.com/' },
+  { label: '豆瓣', href: 'https://www.douban.com/' },
+];
+
 export type ModuleSlug = 'travel' | 'ai-lab' | 'math-notes' | 'reading' | 'music';
 
 export interface ModuleDef {

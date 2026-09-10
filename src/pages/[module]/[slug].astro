@@ -1,0 +1,46 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { MODULES, STATUS_LABEL, STATUS_CLASS } from '../../consts';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { module: post.data.module, slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const mod = MODULES.find((m) => m.slug === post.data.module)!;
+const { Content } = await render(post);
+
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article>
+    <header class="post-head">
+      <div class="wrap">
+        <div class="crumbs">
+          <a href="/">{'首页'}</a> / <a href={`/${mod.slug}`}>{mod.name}</a> / {post.data.specimen}
+        </div>
+        <h1>{post.data.title}</h1>
+        <div class="post-meta">
+          <span>{post.data.specimen}</span>
+          <span class={`badge ${STATUS_CLASS[post.data.status]}`}>{STATUS_LABEL[post.data.status]}</span>
+          <span>采集于 {fmt(post.data.date)}</span>
+          {post.data.tags.length > 0 && (
+            <span class="tags">{post.data.tags.map((t) => <span class="tag">{t}</span>)}</span>
+          )}
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <div class="post-body">
+        <Content />
+      </div>
+    </div>
+  </article>
+</BaseLayout>

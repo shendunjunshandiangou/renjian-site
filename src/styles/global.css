@@ -337,9 +337,46 @@ a.brand-name:hover { color: var(--accent); }
 .post-body { max-width: 720px; padding: 48px 0 96px; font-size: 17px; line-height: 2.05; }
 .post-body p { margin: 1.2em 0; }
 /* 列表页 */
-.list-head { padding: 64px 0 28px; border-bottom: 2px solid var(--ink); }
+.list-head { padding: 64px 0 28px; border-bottom: 2px solid var(--ink); display: flex; align-items: baseline; justify-content: space-between; }
 .list-head h1 { font-family: var(--serif); font-size: 34px; font-weight: 700; letter-spacing: 0.1em; }
 .list-head .en { font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em; color: var(--ink-faint); margin-left: 14px; }
+.list-head .count { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 0.1em; }
+.list-section { padding: 0 0 96px; }
+.list-note { font-size: 14.5px; color: var(--ink-soft); padding: 18px 0 6px; }
+.empty-note { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.08em; color: var(--ink-faint); padding: 40px 0; }
+
+/* 模块页 hero */
+.page-hero { padding: 72px 0 56px; border-bottom: 1px solid var(--line); }
+.page-hero-grid { display: grid; grid-template-columns: 11fr 9fr; gap: 48px; align-items: center; }
+.page-title { font-family: var(--serif); font-size: 44px; font-weight: 700; letter-spacing: 0.06em; line-height: 1.35; }
+.page-title-en { font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: 0.26em; color: var(--ink-faint); margin-left: 16px; text-transform: uppercase; }
+.page-desc { margin-top: 22px; max-width: 620px; color: var(--ink-soft); font-size: 17px; line-height: 1.95; }
+.page-meta { margin-top: 32px; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.12em; color: var(--ink-faint); display: flex; gap: 28px; flex-wrap: wrap; }
+.page-meta b { color: var(--ink-soft); font-weight: 400; }
+.page-fig { position: relative; }
+.page-fig img { display: block; width: 100%; border-radius: 4px; }
+.page-fig img.fit-c { object-fit: contain; }
+.page-fig figcaption { padding: 8px 2px 0; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--ink-faint); display: flex; justify-content: space-between; }
+
+/* 文章页补充 */
+.post-head .crumbs a { color: var(--accent); text-decoration: none; }
+.entry h4 a { color: inherit; text-decoration: none; }
+.entry h4 a:hover { color: var(--accent); }
+.post-body a { color: var(--accent); }
+.post-body h2 { font-family: var(--serif); font-size: 26px; font-weight: 700; letter-spacing: 0.06em; margin: 2em 0 0.6em; }
+.post-body ul, .post-body ol { margin: 1.2em 0; padding-left: 1.4em; }
+.post-body li { margin: 0.4em 0; }
+.post-body code { font-family: var(--mono); font-size: 0.92em; background: var(--accent-tint); padding: 1px 6px; }
+.post-body blockquote { border-left: 2px solid var(--accent); padding-left: 20px; color: var(--ink-soft); margin: 1.4em 0; }
+
+/* 关于页 */
+.about-body { max-width: 720px; padding: 44px 0 0; font-size: 17px; line-height: 2.05; }
+.about-body p { margin: 1.1em 0; }
+.about-body h2 { font-family: var(--serif); font-size: 24px; font-weight: 700; letter-spacing: 0.06em; margin: 1.8em 0 0.5em; }
+.about-body ul { margin: 1em 0; padding-left: 1.4em; }
+.about-body li { margin: 0.4em 0; }
+.about-body code { font-family: var(--mono); font-size: 0.92em; background: var(--accent-tint); padding: 1px 6px; }
+.about-body b { font-weight: 700; }
 /* 暗色模式 */
 @media (prefers-color-scheme: dark) {
   :root {
