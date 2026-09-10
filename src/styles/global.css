@@ -248,9 +248,12 @@
   /* ===== illustrations ===== */
   .hero-fig { position: relative; z-index: 2; }
   .hero-fig img {
-    display: block; width: 100%;
+    display: block; width: 100%; height: auto;
     border-radius: 4px;
   }
+  /* Astro <Image> 会输出 width/height 属性（呈现提示），若不置 height:auto
+     会压过 aspect-ratio 导致图片被纵向拉伸 */
+  .cell .pic img, .page-fig img, .post-body img { height: auto; }
   /* JS 正常时才启用动画；任何环境默认都是可见终态 */
   .anim .hero-fig { animation: heroIn 1.5s cubic-bezier(.25,.8,.25,1) 0.05s both; }
   .hero-fig figcaption {
@@ -354,7 +357,7 @@ a.brand-name:hover { color: var(--accent); }
 .page-meta { margin-top: 32px; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.12em; color: var(--ink-faint); display: flex; gap: 28px; flex-wrap: wrap; }
 .page-meta b { color: var(--ink-soft); font-weight: 400; }
 .page-fig { position: relative; }
-.page-fig img { display: block; width: 100%; border-radius: 4px; }
+.page-fig img { display: block; width: 100%; height: auto; border-radius: 4px; }
 .page-fig img.fit-c { object-fit: contain; }
 .page-fig figcaption { padding: 8px 2px 0; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--ink-faint); display: flex; justify-content: space-between; }
 
