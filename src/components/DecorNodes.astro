@@ -1,0 +1,71 @@
+---
+// 方案 B · 节点网络
+// 空心节点 + 细连线，整体缓慢漂移，节点错峰呼吸；一枚朱砂激活点带扩散光环。
+// 纯 SVG + CSS，无 JS、无外部依赖；尊重 prefers-reduced-motion。
+const NODES: Array<[number, number]> = [
+  [86, 128], [156, 74], [232, 112], [312, 84], [352, 164],
+  [292, 232], [332, 302], [242, 332], [152, 322], [72, 252],
+  [42, 172], [182, 204], [124, 182], [258, 186],
+];
+const EDGES: Array<[number, number]> = [
+  [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8],
+  [8, 9], [9, 10], [10, 0], [1, 11], [11, 2], [11, 5], [9, 11],
+  [12, 9], [12, 10], [13, 5], [13, 6], [2, 13],
+];
+const ACTIVE = 11;
+---
+<div class="d-nodes">
+  <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="节点网络装饰">
+    <g class="net">
+      <g stroke="var(--line-strong, #c8c0b0)" stroke-width="1" opacity=".85">
+        {EDGES.map(([a, b]) => (
+          <line x1={NODES[a][0]} y1={NODES[a][1]} x2={NODES[b][0]} y2={NODES[b][1]} />
+        ))}
+      </g>
+      {NODES.map(([x, y], i) => (
+        <circle
+          class="node"
+          cx={x} cy={y} r={i === ACTIVE ? 4.2 : 2.6}
+          fill={i === ACTIVE ? 'var(--accent, #c2452d)' : 'var(--bg, #faf8f3)'}
+          stroke={i === ACTIVE ? 'var(--accent, #c2452d)' : 'var(--ink-faint, #9a9184)'}
+          stroke-width="1"
+          style={`animation-delay:${(i * 0.42).toFixed(2)}s`}
+        />
+      ))}
+      <circle
+        class="halo"
+        cx={NODES[ACTIVE][0]} cy={NODES[ACTIVE][1]} r="4.2"
+        fill="none" stroke="var(--accent, #c2452d)" stroke-width="1"
+      />
+    </g>
+  </svg>
+</div>
+
+<style>
+  .d-nodes { width: 100%; height: 100%; display: grid; place-items: center; }
+  .d-nodes svg { width: 100%; height: 100%; overflow: visible; }
+  .net { animation: netDrift 15s ease-in-out infinite; }
+  .node { animation: nodeBreath 5.4s ease-in-out infinite; }
+  .halo {
+    transform-box: fill-box; transform-origin: center;
+    animation: haloOut 3.6s ease-out infinite;
+  }
+  @keyframes netDrift {
+    0%, 100% { transform: translate(0, 0); }
+    33%      { transform: translate(6px, -7px); }
+    66%      { transform: translate(-6px, 5px); }
+  }
+  @keyframes nodeBreath {
+    0%, 100% { opacity: .35; }
+    50%      { opacity: 1; }
+  }
+  @keyframes haloOut {
+    0%   { transform: scale(1);   opacity: .75; }
+    100% { transform: scale(3.4); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .net, .node, .halo { animation: none; }
+    .node { opacity: .7; }
+    .halo { opacity: .25; }
+  }
+</style>

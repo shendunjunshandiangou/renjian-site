@@ -1,0 +1,43 @@
+---
+// 方案 C · 声音波形
+// 一排细柱按正弦错峰起伏，模拟音频频谱；其中一根常驻朱砂高亮。
+// 纯 SVG + CSS，无 JS、无外部依赖；尊重 prefers-reduced-motion。
+const BARS = Array.from({ length: 29 }, (_, i) => i);
+const HOT = 18;
+---
+<div class="d-wave">
+  <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid meet" role="img" aria-label="声音波形装饰">
+    <g>
+      {BARS.map((i) => {
+        const x = 14 + i * 13;
+        const base = 18 + Math.abs(Math.sin(i * 0.9)) * 34;
+        const h = Math.round(base);
+        const y = 60 - h / 2;
+        return (
+          <rect
+            class="bar"
+            x={x} y={y} width="3" height={h} rx="1.5"
+            fill={i === HOT ? 'var(--accent, #c2452d)' : 'var(--line-strong, #c8c0b0)'}
+            style={`animation-delay:${(i * 0.09).toFixed(2)}s; --h:${h}`}
+          />
+        );
+      })}
+    </g>
+  </svg>
+</div>
+
+<style>
+  .d-wave { width: 100%; height: 100%; display: grid; place-items: center; }
+  .d-wave svg { width: 100%; height: 100%; overflow: visible; }
+  .bar {
+    transform-box: fill-box; transform-origin: center;
+    animation: barDance 2.6s ease-in-out infinite;
+  }
+  @keyframes barDance {
+    0%, 100% { transform: scaleY(.45); opacity: .5; }
+    50%      { transform: scaleY(1);   opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bar { animation: none; opacity: .7; transform: scaleY(.75); }
+  }
+</style>

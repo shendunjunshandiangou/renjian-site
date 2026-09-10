@@ -1,0 +1,44 @@
+---
+// 方案 A · 年轮波纹（等高线式）
+// 低饱和细线自中心缓慢外扩并淡出，循环产生「生长 / 采样」感；中心一枚朱砂种子点。
+// 纯 SVG + CSS，无 JS、无外部依赖；尊重 prefers-reduced-motion。
+---
+<div class="d-rings">
+  <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="年轮式波纹装饰">
+    <g fill="none" stroke="var(--line-strong, #c8c0b0)" stroke-width="1">
+      <circle class="ring" cx="200" cy="200" r="52" style="animation-delay:0s" />
+      <circle class="ring" cx="200" cy="200" r="86" style="animation-delay:1.15s" />
+      <circle class="ring" cx="200" cy="200" r="120" style="animation-delay:2.3s" />
+      <circle class="ring" cx="200" cy="200" r="154" style="animation-delay:3.45s" />
+      <circle class="ring" cx="200" cy="200" r="188" style="animation-delay:4.6s" />
+    </g>
+    <circle class="seed" cx="200" cy="200" r="3.2" fill="var(--accent, #c2452d)" />
+  </svg>
+</div>
+
+<style>
+  .d-rings { width: 100%; height: 100%; display: grid; place-items: center; }
+  .d-rings svg { width: 100%; height: 100%; overflow: visible; }
+  .ring {
+    transform-box: view-box; transform-origin: 200px 200px;
+    animation: ringOut 5.75s cubic-bezier(.3,.6,.35,1) infinite;
+  }
+  .seed {
+    transform-box: view-box; transform-origin: 200px 200px;
+    animation: seedPulse 5.75s ease-in-out infinite;
+  }
+  @keyframes ringOut {
+    0%   { transform: scale(.62); opacity: 0; }
+    12%  { opacity: .8; }
+    70%  { opacity: .28; }
+    100% { transform: scale(1.28); opacity: 0; }
+  }
+  @keyframes seedPulse {
+    0%, 100% { opacity: .35; transform: scale(.9); }
+    50%      { opacity: 1;   transform: scale(1.15); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ring { animation: none; opacity: .45; transform: scale(.9); }
+    .seed { animation: none; opacity: .8; }
+  }
+</style>

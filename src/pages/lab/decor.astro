@@ -1,0 +1,137 @@
+---
+// 装饰图案方案对比页（内部评审用，不进主导航）
+// 四个候选方案：A 年轮波纹 / B 节点网络 / C 声音波形 / D 落墨微粒
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import DecorRings from '../../components/DecorRings.astro';
+import DecorNodes from '../../components/DecorNodes.astro';
+import DecorWave from '../../components/DecorWave.astro';
+import DecorSpecks from '../../components/DecorSpecks.astro';
+
+const OPTIONS = [
+  {
+    id: 'A', name: '年轮波纹', en: 'GROWTH RINGS',
+    desc: '细线自中心缓慢外扩淡出，像树木年轮 / 采样扩散。最贴「标本 · 生长」母题，气质安静。',
+    tone: '安静 · 生长感最强',
+    fit: '首屏角落、章节大留白处',
+    Comp: DecorRings,
+  },
+  {
+    id: 'B', name: '节点网络', en: 'SPECIMEN NETWORK',
+    desc: '空心节点细线相连、整体缓漂，一枚朱砂激活点带扩散光环。像藏品之间的关联图谱。',
+    tone: '理性 · 结构感最强',
+    fit: '页脚、关于页、数据类区块',
+    Comp: DecorNodes,
+  },
+  {
+    id: 'C', name: '声音波形', en: 'SOUND WAVEFORM',
+    desc: '一排细柱错峰起伏，模拟频谱，一根常驻朱砂高亮。呼应「声音档案」分区。',
+    tone: '轻快 · 节奏感最强',
+    fit: '声音档案、文章页眉',
+    Comp: DecorWave,
+  },
+  {
+    id: 'D', name: '落墨微粒', en: 'FLOATING SPECKS',
+    desc: '细碎小点缓慢上浮淡出，像标本室浮尘 / 培养皿孢子。存在感最弱、不抢内容。',
+    tone: '克制 · 氛围感最强',
+    fit: '全站背景层（可叠在其他方案下）',
+    Comp: DecorSpecks,
+  },
+];
+---
+<BaseLayout title="装饰方案对比" noindex>
+  <section class="lab-head">
+    <div class="wrap">
+      <div class="lab-kicker">RS-LAB · 内部评审页 · 非正式版面</div>
+      <h1>全站会动装饰图案 · 四案对比</h1>
+      <p class="lab-sub">
+        统一约束：低饱和、慢速、可无限循环、米白纸感 + 单一朱砂点缀；纯 CSS/SVG 无外部依赖；
+        自动跟随「减少动态效果」系统设置。下面每个方案给同一组场景（角落 / 章节 / 页脚）的表现。
+      </p>
+    </div>
+  </section>
+
+  <section class="lab-grid">
+    <div class="wrap lab-cards">
+      {OPTIONS.map(({ id, name, en, desc, tone, fit, Comp }) => (
+        <article class="lab-card">
+          <div class="lab-stage">
+            <Comp />
+          </div>
+          <div class="lab-body">
+            <div class="lab-tag">方案 {id}</div>
+            <h2>{name}<span class="en">{en}</span></h2>
+            <p>{desc}</p>
+            <div class="lab-meta">
+              <span class="k">{tone}</span>
+              <span class="k alt">{fit}</span>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="lab-scene">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="t">场景演练<span class="en">IN CONTEXT</span></div>
+        <div class="count">A + D 组合示例</div>
+      </div>
+      <div class="demo-band">
+        <div class="demo-decor"><DecorRings /></div>
+        <div class="demo-copy">
+          <div class="demo-kicker"><span class="dot"></span>RS-0000 · 组合示范</div>
+          <h3>年轮做角，微粒做底</h3>
+          <p>主体右下角放年轮波纹，全局背景叠一层落墨微粒——一个给「生长」，一个给「气氛」，都不抢文字。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lab-head { padding: 72px 0 30px; border-bottom: 1px solid var(--line); }
+  .lab-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 16px; }
+  .lab-head h1 { font-family: var(--serif); font-size: 40px; font-weight: 700; letter-spacing: 0.03em; margin: 0 0 14px; }
+  .lab-sub { font-size: 15px; line-height: 2; color: var(--ink-soft); max-width: 760px; margin: 0; }
+
+  .lab-grid { padding: 44px 0 10px; }
+  .lab-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .lab-card { background: var(--card); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+  .lab-stage {
+    height: 260px; padding: 26px;
+    background:
+      radial-gradient(circle at 72% 28%, rgba(194, 69, 45, 0.05), transparent 62%),
+      var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .lab-body { padding: 22px 24px 26px; }
+  .lab-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; color: var(--accent); margin-bottom: 10px; }
+  .lab-body h2 { font-family: var(--serif); font-size: 21px; font-weight: 700; margin: 0 0 12px; letter-spacing: 0.04em; }
+  .lab-body h2 .en { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: var(--ink-faint); margin-left: 10px; font-weight: 400; }
+  .lab-body p { font-size: 14px; line-height: 1.9; color: var(--ink-soft); margin: 0 0 16px; }
+  .lab-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+  .lab-meta .k {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+    padding: 4px 9px; border: 1px solid var(--line-strong); border-radius: 2px; color: var(--ink-soft);
+  }
+  .lab-meta .k.alt { color: var(--accent); border-color: rgba(194, 69, 45, 0.35); }
+
+  .lab-scene { padding: 54px 0 90px; }
+  .demo-band {
+    position: relative; margin-top: 22px; padding: 46px 40px;
+    border: 1px solid var(--line); border-radius: 3px; background: var(--card);
+    display: grid; grid-template-columns: 300px 1fr; gap: 40px; align-items: center; overflow: hidden;
+  }
+  .demo-decor { height: 220px; }
+  .demo-kicker { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: var(--ink-faint); margin-bottom: 14px; }
+  .demo-kicker .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: middle; }
+  .demo-copy h3 { font-family: var(--serif); font-size: 26px; font-weight: 700; margin: 0 0 12px; letter-spacing: 0.04em; }
+  .demo-copy p { font-size: 14.5px; line-height: 1.95; color: var(--ink-soft); margin: 0; max-width: 520px; }
+
+  @media (max-width: 860px) {
+    .lab-cards { grid-template-columns: 1fr; }
+    .demo-band { grid-template-columns: 1fr; padding: 32px 24px; }
+    .lab-head h1 { font-size: 30px; }
+  }
+</style>
