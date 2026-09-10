@@ -135,7 +135,22 @@
     padding: 30px 28px 26px;
     position: relative;
   }
+  /* 卡片本身是 <a>：显式覆盖浏览器默认链接样式（蓝字 + 下划线）。
+     覆盖 :visited/:hover/:active 全状态，避免任一状态回退成默认链接外观。 */
+  .cell,
+  .cell:visited,
+  .cell:hover,
+  .cell:active {
+    color: var(--ink);
+    text-decoration: none;
+  }
   .cell:hover { background: var(--accent-tint); }
+  /* 键盘可访问性：保留清晰但克制的 focus-visible 指示（鼠标点击不出现） */
+  .cell:focus:not(:focus-visible) { outline: none; }
+  .cell:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -3px;
+  }
   .cell .idx {
     font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
     color: var(--ink-faint);
