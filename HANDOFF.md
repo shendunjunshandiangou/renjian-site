@@ -77,9 +77,25 @@ git init && git add -A && git commit -m "chore: astro minimal init"
 | 10 收尾 | ✅ 完成 | rss.xml + notes.xml + sitemap.xml + robots.txt + 暗色模式 + README |
 
 **当前构建：14 页通过**（`npm run build`）。路由全部 200。
-质检截图见 `qa-shots/`（home / travel / post / notes），对照 `research/mockups/shots/home-final-v8.jpg`。
+质检截图见 `qa-shots/`（home / travel / travel_kyoto-rain / notes / about / all，浅色模式），对照 `research/mockups/shots/home-final-v8.jpg`。
 
 > 第 8-10 步由小毛1号接手完成（小毛3号 k3 额度中断）。第 4 步部署待用户授权 GitHub。
+
+### 质检发现（已修复）
+
+| 问题 | 严重度 | 状态 |
+|---|---|---|
+| Astro `<Image>` 输出的 width/height 属性作为呈现提示压过 `aspect-ratio`，hero 图渲染 617×1400（应 617×617）、卡片图 388×934（应 388×267），图片被纵向拉伸 | 高（全局可见） | ✅ 已修（`global.css` 加 `height:auto`）|
+
+### 验收方式与结论
+
+设计基准 v8 与构建产物做**确定性布局比对**（CDP 量取真实渲染坐标，浅色模式，动画结束态）：
+
+- 配色：`#faf8f3` / `#26221c` 一致
+- 顶栏 1265×85、hero 1265×900、hero 网格 1265×644、hero 图 617×617@x600、分区卡 388×551、两处 section-head —— **逐项与 v8 完全一致**
+- 唯一差异：`.stream` 高 1599 vs v8 1745，因示例内容按规格放 2 条随想（v8 为 3 条），属内容差异
+
+> 注：视觉模型（kimi/k3、deepseek vision-exp）当时认证不可用，故改用渲染坐标比对替代肉眼验收。
 
 ## 6. 如果小毛3号掉线了
 
