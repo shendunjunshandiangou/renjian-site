@@ -22,6 +22,11 @@ jobs:
         uses: actions/checkout@v4
       - name: Build with Astro
         uses: withastro/action@v3
+        # GitHub Pages 仅作为子路径预览；生产由 Cloudflare Pages 根路径托管。
+        # 注入 PAGES_BASE/PAGES_SITE，使同一份源码在预览下生成 /renjian-site/ 前缀。
+        env:
+          PAGES_BASE: /renjian-site/
+          PAGES_SITE: https://shendunjunshandiangou.github.io
         with:
           node-version: 22
 
