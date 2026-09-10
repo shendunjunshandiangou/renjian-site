@@ -1,0 +1,216 @@
+---
+// 馆藏详情页（文章页）重设计 · 三案对比（内部评审，不进导航、noindex）
+// 用同一篇文章（京都的雨天标本）分别套三种版面，便于直接对比。
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { MODULES, STATUS_LABEL, STATUS_CLASS, url } from '../../consts';
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const pick = posts.find((p) => p.id === 'kyoto-rain') ?? posts[0];
+const mod = MODULES.find((m) => m.slug === pick.data.module)!;
+const { Content } = await render(pick);
+
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+
+const OPTIONS = [
+  {
+    id: 'A', name: '标本卡', en: 'SPECIMEN CARD',
+    desc: '顶部做成博物馆标签式的「标本卡」：右侧插图，左侧采集编号 / 分区 / 状态 / 日期 成一枚网格。正文单栏居中，像馆藏标签下面钉着的记录纸。',
+    tone: '仪式感最强 · 最贴「标本馆」母题',
+    best: '适合图文类、行旅志',
+  },
+  {
+    id: 'B', name: '双栏书页', en: 'EDITORIAL SPREAD',
+    desc: '宽版双栏排版：左栏常驻一枚悬浮信息条（编号 / 状态 / 目录），右栏正文分两栏流动。信息密度高，像一本打开的杂志跨页。',
+    tone: '信息量最大 · 最像杂志',
+    best: '适合长文、数理札记',
+  },
+  {
+    id: 'C', name: '长卷极简', en: 'QUIET SCROLL',
+    desc: '收窄到单栏阅读宽度，首段做大的首字下沉，元信息全部压到文末成一行脚注。留白最多，最安静，让文字自己说话。',
+    tone: '最克制 · 阅读最顺',
+    best: '适合随笔、纸上回声',
+  },
+];
+---
+<BaseLayout title="详情页方案对比" noindex>
+  <section class="lab-head">
+    <div class="wrap">
+      <div class="lab-kicker">RS-LAB · 内部评审页 · 非正式版面</div>
+      <h1>馆藏详情页 · 三案对比</h1>
+      <p class="lab-sub">
+        同一篇文章（{pick.data.specimen}《{pick.data.title}》）分别套三种版面。选定后我再把选中的那套落到正式文章页，
+        并保持现有的正文 Markdown 样式与响应式规则。下面每案都给出一段真实排版供对比。
+      </p>
+      <div class="lab-src">样本 → {mod.name} · {pick.data.specimen} · {fmt(pick.data.date)}</div>
+    </div>
+  </section>
+
+  <section class="lab-body">
+    <div class="wrap">
+
+      {/* ── 方案 A · 标本卡 ── */}
+      <article class="opt opt-a">
+        <div class="opt-head">
+          <span class="opt-tag">方案 A</span>
+          <h2>标本卡<span class="en">SPECIMEN CARD</span></h2>
+          <p>{OPTIONS[0].desc}</p>
+          <div class="opt-chips"><span>{OPTIONS[0].tone}</span><span class="alt">{OPTIONS[0].best}</span></div>
+        </div>
+        <div class="opt-stage">
+          <div class="a-card">
+            <div class="a-meta">
+              <div class="a-meta-row"><span class="k">采集编号</span><span class="v">{pick.data.specimen}</span></div>
+              <div class="a-meta-row"><span class="k">所属分区</span><span class="v">{mod.name} · {mod.en}</span></div>
+              <div class="a-meta-row"><span class="k">生长状态</span><span class="v"><b class={`badge ${STATUS_CLASS[pick.data.status]}`}>{STATUS_LABEL[pick.data.status]}</b></span></div>
+              <div class="a-meta-row"><span class="k">采集日期</span><span class="v">{fmt(pick.data.date)}</span></div>
+              <div class="a-meta-row"><span class="k">标签</span><span class="v">{pick.data.tags.join(' · ')}</span></div>
+            </div>
+            <div class="a-title">
+              <a class="a-crumb" href={url(`/${mod.slug}`)}>← {mod.name}</a>
+              <h3>{pick.data.title}</h3>
+              <p>{pick.data.description}</p>
+              <div class="a-stamp">RS</div>
+            </div>
+          </div>
+          <div class="a-prose"><Content /></div>
+        </div>
+      </article>
+
+      {/* ── 方案 B · 双栏书页 ── */}
+      <article class="opt opt-b">
+        <div class="opt-head">
+          <span class="opt-tag">方案 B</span>
+          <h2>双栏书页<span class="en">EDITORIAL SPREAD</span></h2>
+          <p>{OPTIONS[1].desc}</p>
+          <div class="opt-chips"><span>{OPTIONS[1].tone}</span><span class="alt">{OPTIONS[1].best}</span></div>
+        </div>
+        <div class="opt-stage">
+          <div class="b-spread">
+            <aside class="b-rail">
+              <div class="b-rail-no">{pick.data.specimen}</div>
+              <div class="b-rail-block">
+                <div class="k">分区</div><div class="v">{mod.name}</div>
+              </div>
+              <div class="b-rail-block">
+                <div class="k">状态</div><div class="v"><b class={`badge ${STATUS_CLASS[pick.data.status]}`}>{STATUS_LABEL[pick.data.status]}</b></div>
+              </div>
+              <div class="b-rail-block">
+                <div class="k">日期</div><div class="v">{fmt(pick.data.date)}</div>
+              </div>
+              <div class="b-rail-block">
+                <div class="k">标签</div><div class="v">{pick.data.tags.join(' / ')}</div>
+              </div>
+              <a class="b-rail-back" href={url(`/${mod.slug}`)}>← 返回{mod.name}</a>
+            </aside>
+            <div class="b-main">
+              <a class="b-crumb" href={url('/')}>首页 / {mod.name} / {pick.data.specimen}</a>
+              <h3>{pick.data.title}</h3>
+              <p class="b-lede">{pick.data.description}</p>
+              <div class="b-cols"><Content /></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      {/* ── 方案 C · 长卷极简 ── */}
+      <article class="opt opt-c">
+        <div class="opt-head">
+          <span class="opt-tag">方案 C</span>
+          <h2>长卷极简<span class="en">QUIET SCROLL</span></h2>
+          <p>{OPTIONS[2].desc}</p>
+          <div class="opt-chips"><span>{OPTIONS[2].tone}</span><span class="alt">{OPTIONS[2].best}</span></div>
+        </div>
+        <div class="opt-stage">
+          <div class="c-scroll">
+            <div class="c-kicker"><span class="dot"></span>{pick.data.specimen} · {mod.name}</div>
+            <h3>{pick.data.title}</h3>
+            <div class="c-prose"><Content /></div>
+            <div class="c-foot">{fmt(pick.data.date)} · {pick.data.tags.join(' · ')} · {STATUS_LABEL[pick.data.status]}</div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lab-head { padding: 72px 0 30px; border-bottom: 1px solid var(--line); }
+  .lab-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 16px; }
+  .lab-head h1 { font-family: var(--serif); font-size: 40px; font-weight: 700; letter-spacing: 0.03em; margin: 0 0 14px; }
+  .lab-sub { font-size: 15px; line-height: 2; color: var(--ink-soft); max-width: 780px; margin: 0 0 14px; }
+  .lab-src { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--ink-faint); }
+
+  .lab-body { padding: 40px 0 90px; }
+  .opt { padding: 34px 0 10px; border-top: 1px solid var(--line); }
+  .opt:first-child { border-top: none; }
+  .opt-head { max-width: 700px; margin-bottom: 26px; }
+  .opt-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; color: var(--accent); }
+  .opt-head h2 { font-family: var(--serif); font-size: 26px; font-weight: 700; margin: 10px 0 12px; letter-spacing: 0.04em; }
+  .opt-head h2 .en { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: var(--ink-faint); margin-left: 12px; font-weight: 400; }
+  .opt-head p { font-size: 14.5px; line-height: 1.95; color: var(--ink-soft); margin: 0 0 14px; }
+  .opt-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opt-chips span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; padding: 4px 9px; border: 1px solid var(--line-strong); border-radius: 2px; color: var(--ink-soft); }
+  .opt-chips .alt { color: var(--accent); border-color: rgba(194, 69, 45, 0.35); }
+
+  .opt-stage { border: 1px solid var(--line); border-radius: 3px; background: var(--card); padding: 34px; }
+
+  /* 通用内文排版（三案共用底子） */
+  .a-prose, .b-cols, .c-prose { font-size: 16.5px; line-height: 2.05; color: var(--ink); }
+  .a-prose p, .b-cols p, .c-prose p { margin: 1.15em 0; }
+
+  /* ── A 标本卡 ── */
+  .a-card { display: grid; grid-template-columns: 240px 1fr; gap: 34px; padding-bottom: 26px; border-bottom: 1px solid var(--line); }
+  .a-meta { border-left: 2px solid var(--accent); padding-left: 18px; }
+  .a-meta-row { display: flex; flex-direction: column; gap: 3px; padding: 9px 0; border-bottom: 1px dotted var(--line); }
+  .a-meta-row:last-child { border-bottom: none; }
+  .a-meta-row .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--ink-faint); }
+  .a-meta-row .v { font-size: 14px; color: var(--ink); }
+  .a-title { position: relative; }
+  .a-crumb { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--accent); text-decoration: none; }
+  .a-title h3 { font-family: var(--serif); font-size: 32px; font-weight: 700; margin: 14px 0 12px; letter-spacing: 0.03em; }
+  .a-title p { font-size: 14.5px; line-height: 1.95; color: var(--ink-soft); margin: 0; max-width: 560px; }
+  .a-stamp {
+    position: absolute; right: 0; top: 0; width: 44px; height: 44px; border: 1.5px solid var(--accent); border-radius: 50%;
+    display: grid; place-items: center; font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--accent); opacity: .7;
+  }
+  .a-prose { max-width: 680px; padding-top: 26px; }
+
+  /* ── B 双栏书页 ── */
+  .b-spread { display: grid; grid-template-columns: 190px 1fr; gap: 40px; }
+  .b-rail { border-right: 1px solid var(--line); padding-right: 22px; }
+  .b-rail-no { font-family: var(--mono); font-size: 13px; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 22px; }
+  .b-rail-block { margin-bottom: 17px; }
+  .b-rail-block .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--ink-faint); margin-bottom: 4px; }
+  .b-rail-block .v { font-size: 13.5px; color: var(--ink); }
+  .b-rail-back { display: inline-block; margin-top: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--ink-soft); text-decoration: none; }
+  .b-crumb { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--accent); text-decoration: none; }
+  .b-main h3 { font-family: var(--serif); font-size: 34px; font-weight: 700; margin: 14px 0 14px; letter-spacing: 0.03em; }
+  .b-lede { font-size: 15.5px; line-height: 1.95; color: var(--ink-soft); margin: 0 0 24px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+  .b-cols { column-count: 2; column-gap: 36px; }
+  .b-cols :global(p:first-child) { margin-top: 0; }
+
+  /* ── C 长卷极简 ── */
+  .c-scroll { max-width: 620px; margin: 0 auto; }
+  .c-kicker { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: var(--ink-faint); text-align: center; margin-bottom: 20px; }
+  .c-kicker .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: middle; }
+  .c-scroll h3 { font-family: var(--serif); font-size: 33px; font-weight: 700; text-align: center; letter-spacing: 0.04em; margin: 0 0 30px; line-height: 1.45; }
+  .c-prose :global(p:first-child)::first-letter {
+    font-family: var(--serif); font-size: 3.1em; line-height: .9; float: left;
+    padding: 6px 12px 0 0; color: var(--accent); font-weight: 700;
+  }
+  .c-foot { margin-top: 34px; padding-top: 18px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--ink-faint); text-align: center; }
+
+  @media (max-width: 860px) {
+    .opt-stage { padding: 22px 18px; }
+    .a-card { grid-template-columns: 1fr; gap: 22px; }
+    .a-title h3 { font-size: 26px; }
+    .a-stamp { position: static; margin-top: 16px; }
+    .b-spread { grid-template-columns: 1fr; gap: 24px; }
+    .b-rail { border-right: none; border-bottom: 1px solid var(--line); padding: 0 0 18px; display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+    .b-rail-no { margin-bottom: 0; width: 100%; }
+    .b-cols { column-count: 1; }
+    .lab-head h1 { font-size: 30px; }
+  }
+</style>
