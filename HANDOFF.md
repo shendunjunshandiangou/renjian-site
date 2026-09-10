@@ -79,7 +79,15 @@ git init && git add -A && git commit -m "chore: astro minimal init"
 **当前构建：14 页通过**（`npm run build`）。路由全部 200。
 质检截图见 `qa-shots/`（home / travel / travel_kyoto-rain / notes / about / all，浅色模式），对照 `research/mockups/shots/home-final-v8.jpg`。
 
-> 第 8-10 步由小毛1号接手完成（小毛3号 k3 额度中断）。第 4 步部署待用户授权 GitHub。
+> 第 8-10 步由小毛1号接手完成（小毛3号 k3 额度中断）。
+
+### 发布状态（待授权）
+
+- **唯一阻塞**：GitHub 未授权（`gh` 未登录，无 GH 环境变量）
+- 发布执行单见 `RELEASE.md`（① 连接 GitHub → ② 建仓库推 master → ③ Pages 设 GitHub Actions → ④ DNS 四条 A + www CNAME → ⑤ Custom domain + HTTPS → ⑥ 回填本看板）
+- 详细 DNS/域名 runbook 见 `DEPLOY.md`
+- 发布基建已就绪：`astro.config.mjs` site、`public/CNAME`、`public/robots.txt`、`.github/workflows/deploy.yml`（触发分支已匹配 `master`）
+- 授权后第 ⑥ 步将在此回填**仓库地址 / Actions 运行地址 / 线上地址 / 构建结果**
 
 ### 质检发现（已修复）
 
