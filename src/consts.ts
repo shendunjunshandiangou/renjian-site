@@ -61,3 +61,29 @@ export const NAV = [
 
 export const STATUS_LABEL = { seed: '种子', growing: '生长中', evergreen: '已长成' } as const;
 export const STATUS_CLASS = { seed: 'seed', growing: 'grow', evergreen: 'done' } as const;
+
+
+// ===== 分区装饰纹样映射（馆长 2026-09-11 需求：不同模块用不同背景）=====
+export type DecorMotif = 'rings' | 'nodes' | 'wave' | 'specks';
+export interface DecorSpec { motif: DecorMotif; opacity: number; }
+
+export const DECOR_BY_PATH: Record<string, DecorSpec> = {
+  '/':           { motif: 'rings',  opacity: 0.22 }, // 主图年轮（馆长指定）
+  '/travel':     { motif: 'specks', opacity: 0.55 }, // 行旅 · 路上浮尘
+  '/ai-lab':     { motif: 'nodes',  opacity: 0.20 }, // 工坊 · 节点网络
+  '/math-notes': { motif: 'nodes',  opacity: 0.16 }, // 数理 · 结构图谱（更收敛）
+  '/reading':    { motif: 'rings',  opacity: 0.15 }, // 阅读 · 墨痕涟漪（更收敛）
+  '/music':      { motif: 'wave',   opacity: 0.24 }, // 声音 · 声波
+  '/notes':      { motif: 'specks', opacity: 0.50 }, // 随想 · 碎片浮尘
+  '/about':      { motif: 'nodes',  opacity: 0.14 }, // 关于 · 关联
+};
+
+export function decorForPath(path: string): DecorSpec {
+  const clean = (path || '/').replace(/\/+$/, '') || '/';
+  if (DECOR_BY_PATH[clean]) return DECOR_BY_PATH[clean];
+  let best = '';
+  for (const k of Object.keys(DECOR_BY_PATH)) {
+    if (k !== '/' && clean.startsWith(k) && k.length > best.length) best = k;
+  }
+  return best ? DECOR_BY_PATH[best] : { motif: 'specks', opacity: 0.5 };
+}

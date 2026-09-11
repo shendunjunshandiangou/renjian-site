@@ -1,8 +1,10 @@
 ---
 import '../styles/global.css';
-import { SITE, NAV, SOCIAL, url } from '../consts';
+import { SITE, NAV, SOCIAL, url, decorForPath } from '../consts';
 import DecorSpecks from '../components/DecorSpecks.astro';
 import DecorRings from '../components/DecorRings.astro';
+import DecorNodes from '../components/DecorNodes.astro';
+import DecorWave from '../components/DecorWave.astro';
 
 interface Props {
   title?: string;
@@ -12,6 +14,10 @@ interface Props {
 const { title, description = SITE.description, noindex = false } = Astro.props;
 const pageTitle = title ? `${title} — ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
 const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const MOTIFS = { rings: DecorRings, nodes: DecorNodes, wave: DecorWave, specks: DecorSpecks } as const;
+const decor = decorForPath(current);
+const DecorComp = MOTIFS[decor.motif] ?? DecorSpecks;
 ---
 
 <!DOCTYPE html>
@@ -26,8 +32,10 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
   <link rel="alternate" type="application/rss+xml" title={`${SITE.name} · 随想`} href={url('/notes.xml')} />
 </head>
 <body>
-  <!-- 全站背景层 · 方案 D 落墨微粒（aria-hidden，纯氛围，不抢内容） -->
-  <div class="bg-decor" aria-hidden="true"><DecorSpecks /></div>
+  <!-- 全站背景层 · 随分区切换纹样（aria-hidden，纯氛围，不抢内容） -->
+  <div class="bg-decor" data-motif={decor.motif} aria-hidden="true">
+    <div class="decor-stage" style={`--decor-op:${decor.opacity}`}><DecorComp /></div>
+  </div>
 
   <div class="page-shell">
   <header class="top">
@@ -67,8 +75,9 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
   </footer>
   </div>
 
-  <!-- 角落点缀 · 方案 A 年轮波纹（aria-hidden，仅在留白角落，移动端隐藏） -->
-  <div class="corner-decor" aria-hidden="true"><DecorRings /></div>
+  <!-- 角落点缀 · 年轮波纹（左上 + 右下双角；aria-hidden，移动端隐藏） -->
+  <div class="corner-decor corner-tl" aria-hidden="true"><DecorRings /></div>
+  <div class="corner-decor corner-br" aria-hidden="true"><DecorRings /></div>
 
   <script>
     // 动效 JS 门控：JS 正常才启用动画；无 JS 时页面即为完整终态（v3.6 防弹原则）
