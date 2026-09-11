@@ -79,7 +79,11 @@ export const DECOR_BY_PATH: Record<string, DecorSpec> = {
 };
 
 export function decorForPath(path: string): DecorSpec {
-  const clean = (path || '/').replace(/\/+$/, '') || '/';
+  // 预览部署在子路径（如 /renjian-site/），pathname 会带 BASE 前缀；
+  // 纹样映射表按站点根路径编写，故先剥掉 BASE 前缀再匹配（生产 BASE 为空，无影响）。
+  let p = path || '/';
+  if (BASE && (p === BASE || p.startsWith(BASE + '/'))) p = p.slice(BASE.length) || '/';
+  const clean = p.replace(/\/+$/, '') || '/';
   if (DECOR_BY_PATH[clean]) return DECOR_BY_PATH[clean];
   let best = '';
   for (const k of Object.keys(DECOR_BY_PATH)) {
