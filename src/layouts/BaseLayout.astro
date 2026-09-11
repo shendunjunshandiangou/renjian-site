@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import { SITE, NAV, SOCIAL, url } from '../consts';
+import DecorSpecks from '../components/DecorSpecks.astro';
+import DecorRings from '../components/DecorRings.astro';
 
 interface Props {
   title?: string;
@@ -24,6 +26,10 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
   <link rel="alternate" type="application/rss+xml" title={`${SITE.name} · 随想`} href={url('/notes.xml')} />
 </head>
 <body>
+  <!-- 全站背景层 · 方案 D 落墨微粒（aria-hidden，纯氛围，不抢内容） -->
+  <div class="bg-decor" aria-hidden="true"><DecorSpecks /></div>
+
+  <div class="page-shell">
   <header class="top">
     <div class="wrap top-inner">
       <div class="brand">
@@ -59,6 +65,10 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
       </div>
     </div>
   </footer>
+  </div>
+
+  <!-- 角落点缀 · 方案 A 年轮波纹（aria-hidden，仅在留白角落，移动端隐藏） -->
+  <div class="corner-decor" aria-hidden="true"><DecorRings /></div>
 
   <script>
     // 动效 JS 门控：JS 正常才启用动画；无 JS 时页面即为完整终态（v3.6 防弹原则）

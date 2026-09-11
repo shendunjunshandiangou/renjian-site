@@ -20,19 +20,25 @@ const fmt = (d: Date) => d.toISOString().slice(0, 10);
 
 <BaseLayout title={post.data.title} description={post.data.description}>
   <article>
-    <header class="post-head">
+    <!-- 标本卡头部（方案 A：博物馆标签式采集信息网格 + 单栏正文） -->
+    <header class="post-head spc-head">
       <div class="wrap">
-        <div class="crumbs">
-          <a href={url('/')}>{'首页'}</a> / <a href={url(`/${mod.slug}`)}>{mod.name}</a> / {post.data.specimen}
-        </div>
-        <h1>{post.data.title}</h1>
-        <div class="post-meta">
-          <span>{post.data.specimen}</span>
-          <span class={`badge ${STATUS_CLASS[post.data.status]}`}>{STATUS_LABEL[post.data.status]}</span>
-          <span>采集于 {fmt(post.data.date)}</span>
-          {post.data.tags.length > 0 && (
-            <span class="tags">{post.data.tags.map((t) => <span class="tag">{t}</span>)}</span>
-          )}
+        <div class="spc-card">
+          <div class="spc-meta">
+            <div class="spc-row"><span class="k">采集编号</span><span class="v">{post.data.specimen}</span></div>
+            <div class="spc-row"><span class="k">所属分区</span><span class="v">{mod.name} · {mod.en}</span></div>
+            <div class="spc-row"><span class="k">生长状态</span><span class="v"><b class={`badge ${STATUS_CLASS[post.data.status]}`}>{STATUS_LABEL[post.data.status]}</b></span></div>
+            <div class="spc-row"><span class="k">采集日期</span><span class="v">{fmt(post.data.date)}</span></div>
+            {post.data.tags.length > 0 && (
+              <div class="spc-row"><span class="k">标签</span><span class="v">{post.data.tags.join(' · ')}</span></div>
+            )}
+          </div>
+          <div class="spc-title">
+            <a class="spc-crumb" href={url(`/${mod.slug}`)}>← {mod.name}</a>
+            <h1>{post.data.title}</h1>
+            {post.data.description && <p>{post.data.description}</p>}
+            <div class="spc-stamp">RS</div>
+          </div>
         </div>
       </div>
     </header>

@@ -429,6 +429,33 @@ a.brand-name:hover { color: var(--accent); }
 .post-body code { font-family: var(--mono); font-size: 0.92em; background: var(--accent-tint); padding: 1px 6px; }
 .post-body blockquote { border-left: 2px solid var(--accent); padding-left: 20px; color: var(--ink-soft); margin: 1.4em 0; }
 
+/* 详情页 · 标本卡头部（方案 A）——不动正文 .post-body 样式 */
+.spc-head { padding: 64px 0 40px; }
+.spc-card {
+  display: grid; grid-template-columns: 240px 1fr; gap: 40px;
+  padding-bottom: 30px; border-bottom: 1px solid var(--line);
+}
+.spc-meta { border-left: 2px solid var(--accent); padding-left: 18px; }
+.spc-row { display: flex; flex-direction: column; gap: 3px; padding: 9px 0; border-bottom: 1px dotted var(--line); }
+.spc-row:last-child { border-bottom: none; }
+.spc-row .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: var(--ink-faint); }
+.spc-row .v { font-size: 14px; color: var(--ink); }
+.spc-title { position: relative; }
+.spc-crumb { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--accent); text-decoration: none; }
+.spc-title h1 { font-family: var(--serif); font-size: 36px; font-weight: 700; margin: 14px 0 12px; letter-spacing: 0.03em; line-height: 1.4; }
+.spc-title p { font-size: 15px; line-height: 1.95; color: var(--ink-soft); margin: 0; max-width: 620px; }
+.spc-stamp {
+  position: absolute; right: 0; top: 0; width: 46px; height: 46px;
+  border: 1.5px solid var(--accent); border-radius: 50%;
+  display: grid; place-items: center; font-family: var(--mono); font-size: 12px;
+  letter-spacing: 0.08em; color: var(--accent); opacity: .7;
+}
+@media (max-width: 860px) {
+  .spc-card { grid-template-columns: 1fr; gap: 22px; }
+  .spc-title h1 { font-size: 27px; }
+  .spc-stamp { position: static; margin-top: 16px; }
+}
+
 /* 关于页 */
 .about-body { max-width: 720px; padding: 44px 0 0; font-size: 17px; line-height: 2.05; }
 .about-body p { margin: 1.1em 0; }
@@ -437,6 +464,29 @@ a.brand-name:hover { color: var(--accent); }
 .about-body li { margin: 0.4em 0; }
 .about-body code { font-family: var(--mono); font-size: 0.92em; background: var(--accent-tint); padding: 1px 6px; }
 .about-body b { font-weight: 700; }
+
+/* ===== 全站装饰层（方案 D 落墨微粒 + A 年轮波纹）=====
+   约束：aria-hidden、仅 transform/opacity、prefers-reduced-motion 全量降级、
+   低饱和不抢文字、移动端收敛。包在 .page-shell 之外，正文层级不变。 */
+.bg-decor {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+}
+/* 内容层压在背景装饰之上，保证正文可读 */
+.page-shell { position: relative; z-index: 1; }
+.corner-decor {
+  position: fixed; right: -70px; bottom: -70px;
+  width: 340px; height: 340px; z-index: 0;
+  opacity: 0.42; pointer-events: none;
+}
+@media (max-width: 860px) {
+  .corner-decor { display: none; }
+  .bg-decor { opacity: 0.6; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .corner-decor { opacity: 0.3; }
+}
+
 /* 暗色模式 */
 @media (prefers-color-scheme: dark) {
   :root {
