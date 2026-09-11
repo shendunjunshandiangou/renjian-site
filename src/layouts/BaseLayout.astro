@@ -31,7 +31,7 @@ const DecorComp = MOTIFS[decor.motif] ?? DecorSpecks;
   <link rel="alternate" type="application/rss+xml" title={`${SITE.name} · 标本`} href={url('/rss.xml')} />
   <link rel="alternate" type="application/rss+xml" title={`${SITE.name} · 随想`} href={url('/notes.xml')} />
 </head>
-<body>
+<body data-motif={decor.motif}>
   <!-- 全站背景层 · 随分区切换纹样（aria-hidden，纯氛围，不抢内容） -->
   <div class="bg-decor" data-motif={decor.motif} aria-hidden="true">
     <div class="decor-stage" style={`--decor-op:${decor.opacity}`}><DecorComp /></div>

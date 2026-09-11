@@ -474,7 +474,7 @@ a.brand-name:hover { color: var(--accent); }
 }
 .bg-decor .decor-stage { position: absolute; opacity: var(--decor-op, 0.2); }
 /* 各纹样的落位与尺度（大面积留白处，压低存在感） */
-.bg-decor[data-motif="rings"]  .decor-stage { width: 92vmin; height: 92vmin; top: -18vmin; right: -22vmin; }
+.bg-decor[data-motif="rings"]  .decor-stage { width: 92vmin; height: 92vmin; top: -18vmin; right: auto; left: -22vmin; }
 .bg-decor[data-motif="nodes"]  .decor-stage { width: 84vmin; height: 84vmin; top: 4vmin; left: -24vmin; }
 .bg-decor[data-motif="wave"]   .decor-stage { width: 100vw; height: 26vmin; left: 0; bottom: 6vmin; }
 .bg-decor[data-motif="specks"] .decor-stage { inset: 0; }
@@ -487,6 +487,8 @@ a.brand-name:hover { color: var(--accent); }
 }
 .corner-decor.corner-tl { left: -70px; top: -70px; }
 .corner-decor.corner-br { right: -70px; bottom: -70px; }
+/* 年轮页：大年轮落左上、角落年轮只留右下 → 两个年轮对角分布，不再挤同侧 */
+body[data-motif="rings"] .corner-decor.corner-tl { display: none; }
 @media (max-width: 860px) {
   .corner-decor { display: none; }
   .bg-decor { opacity: 0.6; }
@@ -502,5 +504,9 @@ a.brand-name:hover { color: var(--accent); }
     --line: #35301f; --line-strong: #4a4433; --accent: #d96a52;
     --accent-tint: rgba(217, 106, 82, 0.1); --card: #1e1a13;
   }
-  .cell .pic img, .hero-fig img { filter: brightness(0.92) sepia(0.12); }
+  /* 插图已抠为透明底（PS 式白底转透明）：深色卡上不再有白纸残底。
+     此处只做"轻微提亮 + 一点暖调"，让浅笔触在深色下仍可辨，且不产生刺眼白块。 */
+  .cell .pic img, .hero-fig img, .page-fig img {
+    filter: brightness(1.55) saturate(1.06) sepia(0.06);
+  }
 }
